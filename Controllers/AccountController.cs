@@ -84,10 +84,20 @@ namespace HeadHunter.Controllers
 
                 if (uploadedFile == null)
                 {
-                    string path = "/Files/default_avatar.png";
-                    FileModel file = new FileModel { Name = "default_avatar.png", Path = path };
-                    _db.Files.Add(file);
-                    model.Avatar = file.Path;
+                    if(model.Role == "applicant")
+                    {
+                        string path = "/Files/applicant.png";
+                        FileModel file = new FileModel { Name = "default_avatar.png", Path = path };
+                        _db.Files.Add(file);
+                        model.Avatar = file.Path;
+                    }
+                    else
+                    {
+                        string path = "/Files/employee.png";
+                        FileModel file = new FileModel { Name = "default_avatar.png", Path = path };
+                        _db.Files.Add(file);
+                        model.Avatar = file.Path;
+                    }
                 }
                 else
                 {
@@ -106,14 +116,15 @@ namespace HeadHunter.Controllers
                 {
                     Email = model.Email,
                     UserName = model.UserName,
-                    Avatar = model.Avatar
+                    Avatar = model.Avatar,
+                    Role = model.Role
                 };
 
                 var result = await _userManager.CreateAsync(user, model.Password);
 
                 if (result.Succeeded)
                 {
-                    await _userManager.AddToRoleAsync(user, "user");
+                    await _userManager.AddToRoleAsync(user, model.Role);
                     await _signInManager.SignInAsync(user, false);
                     return RedirectToAction("Index", "Home");
                 }
