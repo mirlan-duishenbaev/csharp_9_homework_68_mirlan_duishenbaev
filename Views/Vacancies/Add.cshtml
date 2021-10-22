@@ -1,0 +1,38 @@
+﻿@model Vacancy
+@{ ViewData["Title"] = "Add new vacancy";
+    Layout = "_Layout"; }
+
+<h2>Fill out the form to add a vacancy</h2>
+<div class="row">
+    <div class="vacancy_add_form col-md-6">
+        <form asp-action="Add" method="post">
+            <div class="form_row">
+                <label for="">
+                    Должность
+                    <input asp-for="VacancyName" type="text">
+                </label>
+                <label for="">
+                    Категория
+                    <input asp-for="VacancyCategory" type="text">
+                </label>
+                <label for="">
+                    Заработная плата
+                    <input asp-for="SalaryValue" type="text">
+                </label>
+                <label for="">
+                    Описание
+                    <input asp-for="JobDescription" type="text">
+                </label>
+                <label for="">
+                    Обязанности
+                    <input asp-for="JobDuties" type="text">
+                </label>
+                <label for="">
+                    Требуемый опыт
+                    <input asp-for="RequiredExperience" type="text">
+                </label>
+            </div>
+            <button type="submit">Добавить</button>
+        </form>
+    </div>
+</div>

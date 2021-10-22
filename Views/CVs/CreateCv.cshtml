@@ -1,0 +1,27 @@
+﻿@model CV
+@{ ViewData["Title"] = "Add new CV";
+    Layout = "_Layout"; }
+
+<h2>Fill out the form to add a CV</h2>
+<div class="row">
+    <div class="cv_add_form col-md-6">
+        <form asp-action="CreateCv" method="post">
+            <div class="form_row">
+                <label for="">
+                    PositionName
+                    <input asp-for="PositionName" type="text">
+                </label>
+                <label for="">
+                    PositionCategory
+                    <input asp-for="PositionCategory" type="text">
+                </label>
+                <label for="">
+                    ExpectedSalary
+                    <input asp-for="ExpectedSalary" type="text">
+                </label>
+
+            </div>
+            <button type="submit">Create</button>
+        </form>
+    </div>
+</div>

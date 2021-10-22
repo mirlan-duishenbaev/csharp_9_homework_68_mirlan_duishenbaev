@@ -10,7 +10,7 @@ namespace HeadHunter.ViewModels
     public class RegisterViewModel
     {
         [Required(ErrorMessage = "Не указано имя пользователя")]
-        [Display(Name = "Имя пользователя")]
+        
         public string UserName { get; set; }
 
         [Required(ErrorMessage = "Не указан электронный адрес")]
@@ -18,6 +18,10 @@ namespace HeadHunter.ViewModels
         [DataType(DataType.EmailAddress)]
         [Display(Name = "Email")]
         public string Email { get; set; }
+
+        [Required(ErrorMessage = "Не указан номер телефона")]
+        [DataType(DataType.PhoneNumber)]
+        public string PhoneNumber { get; set; }
 
         [Required(ErrorMessage = "Не указан тип пользователя")]
         [Display(Name = "Тип пользователя")]

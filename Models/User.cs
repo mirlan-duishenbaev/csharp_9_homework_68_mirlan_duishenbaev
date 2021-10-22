@@ -12,5 +12,9 @@ namespace HeadHunter.Models
 
         public string Company { get; set; }
         public string Avatar { get; set; }
+
+        public string TelegramProof { get; set; }
+        public string FacebookProof { get; set; }
+        public string LinkedInProof { get; set; }
     }
 }

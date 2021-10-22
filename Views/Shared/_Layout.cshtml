@@ -18,13 +18,46 @@
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
                     <ul class="navbar-nav flex-grow-1">
+
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="UserPage">Личный кабинет</a>
+                            </li>
+                            @if (User.IsInRole("applicant"))
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="CVs" asp-action="CreateCv">Создать резюме</a>
+                                </li>
+                            }
+                            @if(User.IsInRole("employer"))
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Vacancies" asp-action="Add">Добавить вакансию</a>
+                                </li>
+                            }
+                        }
+
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Vacancies" asp-action="Index">Вакансии</a>
                         </li>
                     </ul>
+
+                </div>
+                <div class="login_group">
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        <p>@User.Identity.Name</p>
+
+                        <form method="post" asp-controller="Account" asp-action="LogOut">
+                            <input type="submit" value="Выход" />
+                        </form>
+                    }
+                    else
+                    {
+                        <a asp-controller="Account" asp-action="Login">Вход</a>
+                        <a asp-controller="Account" asp-action="Register">Регистрация</a>
+                    }
                 </div>
             </div>
         </nav>

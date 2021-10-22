@@ -1,0 +1,173 @@
+﻿@model HeadHunter.ViewModels.CvUserViewModel
+<header>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css"
+          integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l"
+          crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.0/css/all.css">
+    <script src="https://kit.fontawesome.com/8d49b22949.js" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.js"
+            integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk="
+            crossorigin="anonymous">
+    </script>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
+
+    <div class="container">
+        <div class="card">
+            <div class="card-body">
+                <img src="@Model.User.Avatar"
+                     class="round mh-100"
+                     style="width: 200px; height: 200px; border-radius: 50%; border: 3px solid black;"
+                     alt="..."><br />
+            </div>
+            <div class="card-body" style="width: 18rem;">
+                <div class="card-body">
+                    <h5 class="card-title">@Model.User.UserName</h5>
+                    <p class="card-text">@Model.User.Email</p>
+                    <p class="card-text">@Model.User.PhoneNumber</p>
+                </div>
+            </div>
+        </div>
+
+        <button type="button" class="btn btn-primary" data-toggle="ajax-modal" data-target="#editUser"
+                data-url="@Url.Action($"Edit/{Model.User.Id}")"> Редактировать </button>
+    </div>
+
+    <div id="PlaceHolderHere"></div>
+
+    <hr />
+
+</header>
+
+<body>
+    @if (User.IsInRole("applicant"))
+    {
+        <div class="container">
+            <h4>Резюме</h4>
+            @foreach (var item in Model.CVs)
+            {
+                <div class="card">
+                    <div class="card-body">
+                        <div>
+                            @item.PositionName
+                        </div><br />
+                        <div>
+                            @item.PositionCategory
+                        </div><br />
+                        <div>
+                            @item.PostDate
+                        </div><br />
+                        @if (item.WorkExperiences != null)
+                        {
+                            <div>
+                                @item.WorkExperiences
+                            </div><br />
+                        }
+                        @if (item.WorkExperiences != null)
+                        {
+                            <div>
+                                @item.StudyExperiences
+                            </div><br />
+                        }
+                        @if (item.UpdateDate != null)
+                        {
+                            <div>
+                                Дата обновления: @item.UpdateDate
+                            </div><br />
+                        }
+                    </div>
+                </div>
+            }
+        </div>
+    }
+
+    @if (User.IsInRole("employer"))
+    {
+        <div class="container">
+            <h4>Вакансии</h4>
+            @foreach (var vacancy in Model.Vacancies)
+            {
+                <a asp-action="VacancyPage" asp-controller="Vacancies" asp-route-vacancyId="@vacancy.Id">
+                    <div class="card" style="max-width: 70rem;">
+                        <div class="card-body">
+                            <div>
+                                @vacancy.Id
+                            </div><br />
+                            <div>
+                                @vacancy.VacancyName
+                            </div><br />
+                            <div>
+                                @vacancy.VacancyCategory
+                            </div><br />
+                            <div>
+                                @vacancy.SalaryValue
+                            </div><br />
+                            <div>
+                                @vacancy.JobDescription
+                            </div><br />
+                            <div>
+                                @vacancy.JobDuties
+                            </div><br />
+                            <div>
+                                @vacancy.RequiredExperience
+                            </div><br />
+                            @if (vacancy.UpdateDate != null)
+                            {
+                                <div>
+                                    Дата обновления: @vacancy.UpdateDate
+                                </div><br />
+                            }
+                        </div>
+
+                    </div>
+                </a>
+            }
+        </div>
+    }
+
+
+</body>
+
+
+<script>
+    $('input[type=radio][name=roleChooser]').change(function () {
+        if (this.value == 'applicant') {
+            $('#userName').html('Имя пользователя');
+        } else if (this.value == 'employer') {
+            $('#userName').html('Наименование компании');
+        }
+    });
+
+
+    $(function () {
+        var PlaceHolderElement = $('#PlaceHolderHere');
+        $('button[data-toggle="ajax-modal"]').click(function (event) {           
+            var url = $(this).data('url');
+            var decodedUrl = decodeURIComponent(url);
+            $get(decodedUrl).done(function (data) {
+                PlaceHolderElement.html(data);
+                PlaceHolderelement.find('.modal').modal('show');
+            })
+        })
+
+        PlaceHolderElement.on('click', '[data-save="modal"]', function (event) {
+            event.preventDefault();
+            var form = $(this).parents('.modal').find('form');
+            var actionUrl = form.attr('action');
+            var sendData = form.serialize();
+            $.post(actionUrl, sendData).done(function (data) {
+                PlaceHolderElement.find('.modal').modal('hide');
+            })
+        })
+    })
+</script>
+
+
+
+

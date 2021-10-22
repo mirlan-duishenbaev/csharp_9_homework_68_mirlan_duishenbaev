@@ -1,0 +1,118 @@
+﻿@model HeadHunter.ViewModels.VacancyPageViewModel
+<script src="https://kit.fontawesome.com/8d49b22949.js" crossorigin="anonymous"></script>
+
+<header>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    @if (User.Identity.IsAuthenticated)
+    {
+        <div class="container">
+            <div class="profile">
+                <div class="profile-image">
+                    <img src="@Model.User.Avatar"
+                         class="round mh-100"
+                         style="width: 200px; height: 200px; border-radius: 50%; border: 3px solid black;"
+                         alt="..."><br />
+
+                    <p>@Model.User.UserName</p>
+                    <p>@Model.User.Email</p>
+                </div>
+            </div>
+        </div>
+    }
+
+</header>
+<main>
+    <div class="container">
+
+        <div>
+            <div class="card border-dark mb-3" style="max-width: 70rem;">
+                <div class="card-header">@Model.Vacancy.User.UserName</div>
+                <div class="card-body text-primary">
+                    <h5 class="card-title">@Model.Vacancy.VacancyName</h5>
+                    <br />
+
+                    <p class="card-text">@Model.Vacancy.VacancyCategory</p>
+                    <br />
+                    <p class="small">@Model.Vacancy.PostDate</p>
+                </div>
+                <div class="card-body">
+                    <p class="card-text">@Model.Vacancy.JobDescription</p>
+                    <br />
+                </div>
+                <div class="card-body">
+                    <p class="card-text">@Model.Vacancy.JobDuties</p>
+                    <br />
+                </div>
+                <div class="card-body">
+                    <p class="card-text">@Model.Vacancy.RequiredExperience</p>
+                    <br />
+                </div>
+                <div class="card-body">
+                    <p class="card-text">@Model.Vacancy.SalaryValue</p>
+                    <br />
+                </div>
+                <div>
+                    @if (Model.Vacancy.Responses == null)
+                    {
+                        <span></span>
+                    }
+                    else
+                    {
+                        <span>Количество откликов: @Model.Vacancy.Responses.Count</span>
+                        @foreach (var item in Model.Vacancy.Responses)
+                        {
+                            <span>@item.User.UserName</span>
+                        }
+
+                    }
+                </div>
+
+            </div>
+            <a class="btn btn-primary" role="button" asp-action="Respond" asp-controller="Vacancies" asp-route-vacancyId="@Model.Vacancy.Id">
+                Откликнуться
+            </a>
+        </div>
+
+    </div>
+
+
+    <div class="popup-bg">
+        <div class="popup">
+
+            <img class="close-popup" width="30" height="30" src="free-icon-cancel-130183.png" alt="">
+
+            <form id="form" method="POST">
+                <label for="">Введите адрес электронной почты</label>
+                <input id="email" type="email" name="email">
+                <label for="">Пароль</label>
+                <input id="pass1" type="password" name="pass">
+                <label for="">Подтвердите пароль</label>
+                <input id="pass2" type="password" name="confirmpass">
+                <p class="alert"></p>
+                <button class="btn btn-dark" type="submit" id="submit">SUBMIT</button>
+            </form>
+        </div>
+    </div>
+
+</main>
+
+<hr>
+
+
+
+<script>
+
+    $('.open-popup').click(function(e) {
+        e.preventDefault();
+        $('.popup-bg').fadeIn(800);
+        $('html').addClass('no-scroll');
+    });
+
+    $('.close-popup').click(function() {
+        $('.popup-bg').fadeOut(800);
+        $('html').removeClass('no-scroll');
+    });
+
+</script>

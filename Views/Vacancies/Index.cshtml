@@ -1,0 +1,29 @@
+﻿@model List<Vacancy>
+
+
+@{ ViewBag.Title = "Вакансии";
+    Layout = "_Layout"; }
+
+<h2>@ViewBag.Title</h2>
+
+<div class="table_section">
+    @if (@Model.Count == 0)
+    {
+        <p>Вакансии еще не добавлены</p> }
+    else
+    {
+        foreach (var item in Model)
+        {
+            <a asp-controller="Vacancies" asp-action="VacancyPage" asp-route-vacancyId="@item.Id">
+                <div class="card mb-3 border-dark" style="max-width: 70rem;">
+                    <div class="card-header">@item.VacancyName</div>
+                    <div class="card-body text-primary">
+                        <h5 class="card-title">@item.VacancyCategory</h5>
+                        <p class="card-text">Зарплата: @item.SalaryValue</p>
+                        <p class="small">@item.PostDate</p>
+                    </div>
+                </div>
+            </a>
+        }
+    }
+</div>

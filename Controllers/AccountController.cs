@@ -60,7 +60,7 @@ namespace HeadHunter.Controllers
                     {
                         return Redirect(model.ReturnUrl);
                     }
-                    return RedirectToAction("UserCabinet");
+                    return RedirectToAction("UserPage");
                 }
                 ModelState.AddModelError("", "Неправильный логин и (или) пароль");
             }
@@ -93,7 +93,7 @@ namespace HeadHunter.Controllers
                     }
                     else
                     {
-                        string path = "/Files/employee.png";
+                        string path = "/Files/employer.png";
                         FileModel file = new FileModel { Name = "default_avatar.png", Path = path };
                         _db.Files.Add(file);
                         model.Avatar = file.Path;
@@ -120,6 +120,7 @@ namespace HeadHunter.Controllers
                     Role = model.Role
                 };
 
+
                 var result = await _userManager.CreateAsync(user, model.Password);
 
                 if (result.Succeeded)
@@ -134,5 +135,91 @@ namespace HeadHunter.Controllers
             }
             return View(model);
         }
+
+        private async Task<User> GetCurrentUser()
+        {
+            return await _userManager.GetUserAsync(HttpContext.User);
+        }
+
+        public async Task<IActionResult> Logout()
+        {
+            await _signInManager.SignOutAsync();
+            return RedirectToAction("Index", "Home");
+        }
+
+
+        public IActionResult UserPage()
+        {
+            User user = GetCurrentUser().Result;
+
+            var cvs = _db.CVs.Where(x => x.User == user).ToList();
+            var vacancies = _db.Vacancies.Where(x => x.User == user).ToList();
+
+            CvUserViewModel model = new CvUserViewModel
+            {
+                User = user,
+                CVs = cvs,
+                Vacancies = vacancies
+            };
+
+            return View(model);
+        }
+
+        [HttpGet]
+        public IActionResult Edit(string userId)
+        {
+            if (userId != null)
+            {
+                User user = _db.SiteUsers.Where(x => x.Id == userId).FirstOrDefault();
+                return PartialView("_Edit", user);
+            }
+            return NotFound();
+        }
+
+        [HttpPost]
+        public IActionResult Edit(User user)
+        {
+            _db.SiteUsers.Update(user);
+            _db.SaveChanges();
+
+            return PartialView("_Edit", user);
+        }
+
+
+
+        //[HttpPost]
+        //public async Task<IActionResult> Edit(EditViewModel model, IFormFile uploadedFile)
+        //{
+        //    string avatar = GetCurrentUser().Result.Avatar;
+
+        //    if (uploadedFile == null)
+        //    {
+
+        //        model.Avatar = avatar;
+        //    }
+        //    else
+        //    {
+        //        string path = "/Files/" + uploadedFile.FileName;
+        //        using (var fileStream = new FileStream(_appEnvironment.WebRootPath + path, FileMode.Create))
+        //        {
+        //            await uploadedFile.CopyToAsync(fileStream);
+        //        }
+        //        FileModel file = new FileModel { Name = uploadedFile.FileName, Path = path };
+        //        _db.Files.Add(file);
+        //        model.Avatar = file.Path;
+        //    }
+
+        //    User user = _db.SiteUsers.FirstOrDefault(x => x.Email == model.Email);
+
+        //    user.Email = model.Email;
+        //    user.UserName = model.UserName;
+        //    user.Avatar = model.Avatar;
+        //    user.PhoneNumber = model.PhoneNumber;
+        //    user.Role = model.Role;
+
+        //    _db.SiteUsers.Update(user);
+        //    _db.SaveChanges();
+        //    return RedirectToAction("UserPage");
+        //}
     }
 }
