@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 using System;
 using System.Collections.Generic;
@@ -166,12 +167,13 @@ namespace HeadHunter.Controllers
         }
 
         [HttpGet]
-        public IActionResult Edit(string userId)
+        public IActionResult Edit(string Id)
         {
-            if (userId != null)
+            if (Id != null)
             {
-                User user = _db.SiteUsers.Where(x => x.Id == userId).FirstOrDefault();
-                return PartialView("_Edit", user);
+                User user = _db.SiteUsers.Where(x => x.Id == Id).FirstOrDefault();
+                return PartialView("_EditAccountPartial", user);
+                //return Json(new { user });
             }
             return NotFound();
         }
@@ -179,10 +181,16 @@ namespace HeadHunter.Controllers
         [HttpPost]
         public IActionResult Edit(User user)
         {
-            _db.SiteUsers.Update(user);
+            User user1 = _db.SiteUsers.FirstOrDefault(x => x.Email == user.Email);
+            user1.Email = user.Email;
+            user1.UserName = user.UserName;
+            user1.PhoneNumber = user.PhoneNumber;
+            user1.Role = user.Role;
+
+            _db.SiteUsers.Update(user1);
             _db.SaveChanges();
 
-            return PartialView("_Edit", user);
+            return PartialView("_EditAccountPartial", user1);
         }
 
 
