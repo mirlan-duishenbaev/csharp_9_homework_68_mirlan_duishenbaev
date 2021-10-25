@@ -16,6 +16,7 @@ namespace HeadHunter.Models
         public DbSet<Response> Responses { get; set; }
         public DbSet<WorkExperience> WorkExperiences { get; set; }
         public DbSet<StudyExperience> StudyExperiences { get; set; }
+        public DbSet<Category> Categories { get; set; }
         public UserContext(DbContextOptions<UserContext> options) : base(options)
         {
         }

@@ -21,9 +21,9 @@
     <div class="form-group">
         <p>Укажите тип пользователя:</p>
         <div>
-            <input type="radio" name="roleChooser" asp-for="Role" id="applicant" value="applicant"
+            <input type="radio" asp-for="Role" id="applicant" value="applicant"
                    checked>Соискатель<br />
-            <input type="radio" name="roleChooser" asp-for="Role" id="employer" value="employer">Работодатель<br />
+            <input type="radio" asp-for="Role" id="employer" value="employer">Работодатель<br />
         </div>
         <span asp-validation-for="Role"></span>
     </div>
@@ -61,7 +61,7 @@
         <span asp-validation-for="PasswordConfirm"></span>
     </div>
     <div>
-        <input type="submit" value="Регистрация" />
+        <input class="mt-3" type="submit" value="Регистрация" />
     </div>
 </form>
 
@@ -78,7 +78,7 @@
 
     <script>
 
-        $('input[type=radio][name=roleChooser]').change(function () {
+        $('input[type=radio]').change(function () {
             if (this.value == 'applicant') {
                 $('#userName').html('Имя пользователя');
             } else if (this.value == 'employer'){

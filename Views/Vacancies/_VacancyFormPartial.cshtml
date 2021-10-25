@@ -1,0 +1,47 @@
+﻿@model HeadHunter.ViewModels.CategoryAndVacancyViewModel
+
+<div asp-validation-summary="All"></div>
+<div class="form_row">
+    <label>
+        Название вакансии
+        <input asp-for="Vacancy.VacancyName" type="text" value="@Model.Vacancy.VacancyName">
+    </label>
+</div>
+<div class="form_row">
+    <label>
+        Категория должности
+        <select asp-for="Vacancy.CategoryId">
+            <option disabled selected>Выберите категорию</option>
+            @foreach (var item in Model.CategoryList)
+            {
+                <option value="@item.Id">@item.Name</option>
+            }
+        </select>
+    </label>
+</div>
+<div class="form_row">
+    <label>
+        Заработная плата
+        <input asp-for="Vacancy.SalaryValue" type="text" value="@Model.Vacancy.SalaryValue">
+    </label>
+</div>
+<div class="form_row">
+    <label>
+        Описание
+        <input asp-for="Vacancy.JobDescription" type="text" value="@Model.Vacancy.JobDescription">
+    </label>
+</div>
+<div class="form_row">
+    <label>
+        Обязанности
+        <input asp-for="Vacancy.JobDuties" type="text" value="@Model.Vacancy.JobDuties">
+    </label>
+</div>
+<div class="form_row">
+    <label>
+        Требуемый опыт
+        <input asp-for="Vacancy.RequiredExperience" type="text" value="@Model.Vacancy.RequiredExperience">
+    </label>
+</div>
+
+

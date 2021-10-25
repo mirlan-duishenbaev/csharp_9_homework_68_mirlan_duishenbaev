@@ -1,4 +1,4 @@
-﻿@model Vacancy
+﻿@model HeadHunter.ViewModels.CategoryAndVacancyViewModel
 @{ ViewData["Title"] = "Add new vacancy";
     Layout = "_Layout"; }
 
@@ -6,32 +6,14 @@
 <div class="row">
     <div class="vacancy_add_form col-md-6">
         <form asp-action="Add" method="post">
-            <div class="form_row">
-                <label for="">
-                    Должность
-                    <input asp-for="VacancyName" type="text">
-                </label>
-                <label for="">
-                    Категория
-                    <input asp-for="VacancyCategory" type="text">
-                </label>
-                <label for="">
-                    Заработная плата
-                    <input asp-for="SalaryValue" type="text">
-                </label>
-                <label for="">
-                    Описание
-                    <input asp-for="JobDescription" type="text">
-                </label>
-                <label for="">
-                    Обязанности
-                    <input asp-for="JobDuties" type="text">
-                </label>
-                <label for="">
-                    Требуемый опыт
-                    <input asp-for="RequiredExperience" type="text">
-                </label>
-            </div>
+            
+            @{ 
+                await Html.RenderPartialAsync("_VacancyFormPartial", new HeadHunter.ViewModels.CategoryAndVacancyViewModel()
+                {
+                    Vacancy = new Vacancy(),
+                    CategoryList = Model.CategoryList
+                });
+            }
             <button type="submit">Добавить</button>
         </form>
     </div>

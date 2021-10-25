@@ -13,12 +13,14 @@ namespace HeadHunter.Models
         public string JobDescription { get; set; }
         public string JobDuties { get; set; }
         public string RequiredExperience { get; set; }
-        public string VacancyCategory { get; set; }
         public DateTime PostDate { get; set; }
         public DateTime UpdateDate { get; set; }
 
         public List<CV> CVs { get; set; }
         public List<Response> Responses { get; set; }
+
+        public int CategoryId { get; set; }
+        public Category Category { get; set; }
 
 
         public string UserId { get; set; }

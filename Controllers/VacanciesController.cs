@@ -16,57 +16,57 @@ namespace HeadHunter.Controllers
     public class VacanciesController : Controller
     {
         private UserContext _db;
-        private IMemoryCache cache;
         private readonly UserManager<User> _userManager;
-        private readonly SignInManager<User> _signInManager;
-        IWebHostEnvironment _appEnvironment;
+
 
         public VacanciesController(UserContext db,
-            UserManager<User> userManager,
-            SignInManager<User> signInManager,
-            IWebHostEnvironment appEnvironment,
-            IMemoryCache memoryCache)
+            UserManager<User> userManager)
         {
             _db = db;
             _userManager = userManager;
-            _signInManager = signInManager;
-            _appEnvironment = appEnvironment;
-            cache = memoryCache;
         }
-
-        public IActionResult Add()
-        {
-            return View();
-        }
-
         private async Task<User> GetCurrentUser()
         {
             return await _userManager.GetUserAsync(HttpContext.User);
         }
 
-        [HttpPost]
-        public IActionResult Add(Vacancy vacancy)
+        public IActionResult Add()
         {
-            if (vacancy != null)
+            var categories = _db.Categories.ToList();
+            var vacancyAndCategory = new CategoryAndVacancyViewModel
             {
-                Vacancy vacancy1 = new Vacancy
+                CategoryList = categories
+            };
+            return View(vacancyAndCategory);
+        }
+
+        [HttpPost]
+        public IActionResult Add(CategoryAndVacancyViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                if (model != null)
                 {
-                    VacancyName = vacancy.VacancyName,
-                    VacancyCategory = vacancy.VacancyCategory,
-                    SalaryValue = vacancy.SalaryValue,
-                    JobDescription = vacancy.JobDescription,
-                    JobDuties = vacancy.JobDuties,
-                    RequiredExperience = vacancy.RequiredExperience,
-                    PostDate = DateTime.Now,
-                    UserId = GetCurrentUser().Result.Id,
-                    User = _db.SiteUsers.FirstOrDefault(x => x.Id == GetCurrentUser().Result.Id)
-                };
+                    Vacancy vacancy = new Vacancy
+                    {
+                        VacancyName = model.Vacancy.VacancyName,
+                        CategoryId = model.Vacancy.CategoryId,
+                        Category = model.Vacancy.Category,
+                        SalaryValue = model.Vacancy.SalaryValue,
+                        JobDescription = model.Vacancy.JobDescription,
+                        JobDuties = model.Vacancy.JobDuties,
+                        RequiredExperience = model.Vacancy.RequiredExperience,
+                        PostDate = DateTime.Now,
+                        UserId = GetCurrentUser().Result.Id,
+                        User = _db.SiteUsers.FirstOrDefault(x => x.Id == GetCurrentUser().Result.Id)
+                    };
 
-                _db.Vacancies.Add(vacancy1);
-                _db.SaveChanges();
+                    _db.Vacancies.Add(vacancy);
+                    _db.SaveChanges();
+                }
+                return RedirectToAction("UserPage", "Account");
             }
-
-            return RedirectToAction("UserPage", "Account");
+            return RedirectToAction("Add");
         }
 
 
@@ -84,6 +84,7 @@ namespace HeadHunter.Controllers
                 if (ModelState.IsValid)
                 {
                     Vacancy vacancy = await _db.Vacancies.Include(x => x.User)
+                        .Include(x => x.Category)
                         .FirstOrDefaultAsync(x => x.Id == vacancyId);
 
 

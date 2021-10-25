@@ -56,6 +56,21 @@ namespace HeadHunter.Migrations
                     b.ToTable("CVs");
                 });
 
+            modelBuilder.Entity("HeadHunter.Models.Category", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    b.Property<string>("Name")
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Categories");
+                });
+
             modelBuilder.Entity("HeadHunter.Models.FileModel", b =>
                 {
                     b.Property<int>("Id")
@@ -211,6 +226,9 @@ namespace HeadHunter.Migrations
                         .HasColumnType("integer")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
+                    b.Property<int>("CategoryId")
+                        .HasColumnType("integer");
+
                     b.Property<string>("JobDescription")
                         .HasColumnType("text");
 
@@ -232,13 +250,12 @@ namespace HeadHunter.Migrations
                     b.Property<string>("UserId")
                         .HasColumnType("text");
 
-                    b.Property<string>("VacancyCategory")
-                        .HasColumnType("text");
-
                     b.Property<string>("VacancyName")
                         .HasColumnType("text");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CategoryId");
 
                     b.HasIndex("UserId");
 
@@ -443,9 +460,17 @@ namespace HeadHunter.Migrations
 
             modelBuilder.Entity("HeadHunter.Models.Vacancy", b =>
                 {
+                    b.HasOne("HeadHunter.Models.Category", "Category")
+                        .WithMany()
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("HeadHunter.Models.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId");
+
+                    b.Navigation("Category");
 
                     b.Navigation("User");
                 });

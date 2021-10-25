@@ -30,7 +30,7 @@
                                     <a class="nav-link text-dark" asp-area="" asp-controller="CVs" asp-action="CreateCv">Создать резюме</a>
                                 </li>
                             }
-                            @if(User.IsInRole("employer"))
+                            @if (User.IsInRole("employer"))
                             {
                                 <li class="nav-item">
                                     <a class="nav-link text-dark" asp-area="" asp-controller="Vacancies" asp-action="Add">Добавить вакансию</a>
