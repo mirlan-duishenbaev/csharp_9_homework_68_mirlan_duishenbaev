@@ -74,28 +74,7 @@
                 Откликнуться
             </a>
         </div>
-
     </div>
-
-
-    <div class="popup-bg">
-        <div class="popup">
-
-            <img class="close-popup" width="30" height="30" src="free-icon-cancel-130183.png" alt="">
-
-            <form id="form" method="POST">
-                <label for="">Введите адрес электронной почты</label>
-                <input id="email" type="email" name="email">
-                <label for="">Пароль</label>
-                <input id="pass1" type="password" name="pass">
-                <label for="">Подтвердите пароль</label>
-                <input id="pass2" type="password" name="confirmpass">
-                <p class="alert"></p>
-                <button class="btn btn-dark" type="submit" id="submit">SUBMIT</button>
-            </form>
-        </div>
-    </div>
-
 </main>
 
 <hr>
@@ -104,15 +83,5 @@
 
 <script>
 
-    $('.open-popup').click(function(e) {
-        e.preventDefault();
-        $('.popup-bg').fadeIn(800);
-        $('html').addClass('no-scroll');
-    });
-
-    $('.close-popup').click(function() {
-        $('.popup-bg').fadeOut(800);
-        $('html').removeClass('no-scroll');
-    });
 
 </script>

@@ -154,7 +154,10 @@ namespace HeadHunter.Controllers
             User user = GetCurrentUser().Result;
 
             var cvs = _db.CVs.Where(x => x.User == user).ToList();
-            var vacancies = _db.Vacancies.Where(x => x.User == user).ToList();
+            var vacancies = _db.Vacancies.Where(x => x.User == user)
+                .Include(x => x.Category)
+                .ToList();
+            
 
             CvUserViewModel model = new CvUserViewModel
             {

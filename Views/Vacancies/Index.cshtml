@@ -16,9 +16,10 @@
         {
             <a asp-controller="Vacancies" asp-action="VacancyPage" asp-route-vacancyId="@item.Id">
                 <div class="card mb-3 border-dark" style="max-width: 70rem;">
-                    <div class="card-header">@item.VacancyName</div>
+                    <div class="card-header">Требуется: @item.VacancyName</div>
                     <div class="card-body text-primary">
-                        @*<h5 class="card-title">@item.VacancyCategory</h5>*@
+                        <h5 class="card-title">Сфера: @item.Category.Name</h5>
+                        <h5 class="card-title">Компания: @item.User.UserName</h5>
                         <p class="card-text">Зарплата: @item.SalaryValue</p>
                         <p class="small">@item.PostDate</p>
                     </div>

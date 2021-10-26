@@ -72,7 +72,10 @@ namespace HeadHunter.Controllers
 
         public IActionResult Index()
         {
-            List<Vacancy> vacancies = _db.Vacancies.ToList();
+            List<Vacancy> vacancies = _db.Vacancies
+                .Include(x => x.User)
+                .Include(x => x.Category)
+                .ToList();
 
             return View(vacancies);
         }
@@ -157,5 +160,14 @@ namespace HeadHunter.Controllers
             }
         }
 
+        public IActionResult Edit()
+        {
+            return View();
+        }
+
+        public IActionResult Update()
+        {
+            return View();
+        }
     }
 }

@@ -1,8 +1,4 @@
 ﻿@model HeadHunter.ViewModels.CvUserViewModel
-<header>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet"
@@ -16,6 +12,13 @@
             crossorigin="anonymous">
     </script>
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
+<header>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
 
 
     <div class="container">
@@ -48,10 +51,10 @@
 
 </header>
 
-<body>
+<main>
     @if (User.IsInRole("applicant"))
     {
-        <div class="container" id="exampledatatable">
+        <div class="container">
             <h4>Резюме</h4>
             @foreach (var item in Model.CVs)
             {
@@ -96,58 +99,33 @@
             <h4>Вакансии</h4>
             @foreach (var vacancy in Model.Vacancies)
             {
-                <a asp-action="VacancyPage" asp-controller="Vacancies" asp-route-vacancyId="@vacancy.Id">
-                    <div class="card" style="max-width: 70rem;">
-                        <div class="card-body">
-                            <div>
-                                @vacancy.Id
-                            </div><br />
-                            <div>
-                                @vacancy.VacancyName
-                            </div><br />
-                            @*<div>
-                                @vacancy.VacancyCategory
-                            </div><br />*@
-                            <div>
-                                @vacancy.SalaryValue
-                            </div><br />
-                            <div>
-                                @vacancy.JobDescription
-                            </div><br />
-                            <div>
-                                @vacancy.JobDuties
-                            </div><br />
-                            <div>
-                                @vacancy.RequiredExperience
-                            </div><br />
-                            @if (vacancy.UpdateDate != null)
-                            {
-                                <div>
-                                    Дата обновления: @vacancy.UpdateDate
-                                </div><br />
-                            }
+                <div class="card border-dark" style="max-width: 70rem;">
+                    <div class="card-body">
+                        <div class="card-header d-flex justify-content-between">
+                            <div>Требуется: @vacancy.VacancyName</div>
+                            <div>Зарплата: @vacancy.SalaryValue</div>
                         </div>
 
+                        <div class="card-body text-primary d-flex justify-content-between">
+                            <div>
+                                <h5 class="card-title">Сфера: @vacancy.Category.Name</h5>
+                                <h5 class="card-title">Компания: @vacancy.User.UserName</h5>
+                            </div>
+                            <div>
+                                <p class="small">Дата публикации:  @vacancy.PostDate.ToShortDateString()</p>
+                                @if (vacancy.UpdateDate != DateTime.MinValue)
+                                {
+                                    <p>
+                                        Дата обновления:  @vacancy.UpdateDate
+                                    </p><br />
+                                }
+                            </div>
+                        </div>
+                        <button type="button" asp-action="Edit" asp-controller="Vacancies" asp-route-Id="@vacancy.Id">Редактировать</button>
+                        <button type="button" asp-action="Edit" asp-controller="Vacancies" asp-route-Id="@vacancy.Id">Обновить</button>
                     </div>
-                </a>
+                </div>
             }
         </div>
     }
-
-
-</body>
-
-
-@section scripts{
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.11.3/af-2.3.7/datatables.min.css" />
-
-    <script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.11.3/af-2.3.7/datatables.min.js"></script>
-    <script>
-        $(document).ready(function () {
-            $('#exampledatatable').DataTable();
-        });
-    </script>
-}
-
-
-
+</main>
